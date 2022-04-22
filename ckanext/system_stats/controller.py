@@ -36,6 +36,7 @@ class BaseController():
         result['Number of datasets linked to publication']  = BaseController.get_linked_publications_count()
         result['dataset_per_org'] = BaseController.get_dataset_per_org()
         result['dataset_per_group'] = BaseController.get_dataset_per_group()
+        result['resource_per_type'] = BaseController.get_resources_by_type()
 
         return render_template('stats_page.html', result=result)
     
@@ -162,4 +163,22 @@ class BaseController():
                 group_dataset[g.name] = len(datasets)
 
         return group_dataset
+    
+
+
+    @staticmethod
+    def get_resources_by_type():
+        resources = {}
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                for res in dataset.resources:
+                    if res.state == 'active':
+                        if res.format and res.format != '':
+                            if res.format.lower() in resources.keys():
+                                resources[res.format.lower()] += 1
+                            else:
+                                resources[res.format.lower()] = 1
+
+        return resources
 

@@ -33,6 +33,14 @@
             <li>{{group ~ ":  " ~ count}}</li>
         {% endfor %}
     </ul>
+
+    <br>
+    <h5>{{_('Data resources per type:')}}</h5>
+    <ul>
+        {% for type, count in result['resource_per_type'].items() %}
+            <li>{{type ~ ":  " ~ count}}</li>
+        {% endfor %}
+    </ul>
     
 
 
