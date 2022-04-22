@@ -2,7 +2,7 @@
 
 
 {% block primary_content_inner %}
-    <h4>{{_('Overall stats')}}</h4>
+    <h3>{{_('Overall stats')}}</h3>
     <ul>
         <li>{{'Number of Datasets:  ' ~  result['Number of Datasets']}}</li>
         <li>{{'Number of Organizations:  ' ~  result['Number of Organizations']}}</li>
@@ -14,7 +14,26 @@
         <li>{{'Number of datasets that their data resources are linked to a sample:  ' ~  result['Number of samples dataset']}}</li>
         <li>{{'Number of datasets linked to publication(s):  ' ~  result['Number of datasets linked to publication']}}</li>
     </ul>
+    <br>
 
+    <h3>{{_('Detailed stats')}}</h3>
+    <br>
+    
+    <h5>{{_('Dataset count per organization:')}}</h5>
+    <ul>
+        {% for org, count in result['dataset_per_org'].items() %}
+            <li>{{org ~ ":  " ~ count}}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <h5>{{_('Dataset count per group:')}}</h5>
+    <ul>
+        {% for group, count in result['dataset_per_group'].items() %}
+            <li>{{group ~ ":  " ~ count}}</li>
+        {% endfor %}
+    </ul>
+    
 
 
 

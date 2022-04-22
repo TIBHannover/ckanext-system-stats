@@ -10,10 +10,9 @@ def check_plugin_enabled(plugin_name):
 
 from flask import render_template
 import ckan.plugins.toolkit as toolkit
-from sqlalchemy.sql.expression import false, null
+from sqlalchemy.sql.expression import false
 import ckan.lib.helpers as h
-import requests
-from ckan.model import Package, Group, User
+from ckan.model import Package, Group, User, Member
 if check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
@@ -35,7 +34,8 @@ class BaseController():
         result['Number of machines resource'], result['Number of machines dataset'] = BaseController.get_linked_machines_count()
         result['Number of samples resource'], result['Number of samples dataset'] = BaseController.get_linked_samples_count()
         result['Number of datasets linked to publication']  = BaseController.get_linked_publications_count()
-
+        result['dataset_per_org'] = BaseController.get_dataset_per_org()
+        result['dataset_per_group'] = BaseController.get_dataset_per_group()
 
         return render_template('stats_page.html', result=result)
     
@@ -121,6 +121,7 @@ class BaseController():
         return [count, dataset_count]
     
 
+
     @staticmethod
     def get_linked_publications_count():
         count = 0
@@ -133,4 +134,32 @@ class BaseController():
                     count += 1
         
         return count
+    
+
+    @staticmethod
+    def get_dataset_per_org():
+        org_dataset = {}
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                org = Group.get(dataset.owner_org)
+                if org.name in org_dataset.keys():
+                    org_dataset[org.name] += 1
+                else:
+                    org_dataset[org.name] = 1
+
+        return org_dataset
+    
+
+
+    @staticmethod
+    def get_dataset_per_group():
+        group_dataset = {}
+        all_groups = Group.all()
+        for g in all_groups:
+            if g.state == 'active' and not g.is_organization:
+                datasets = g.packages()
+                group_dataset[g.name] = len(datasets)
+
+        return group_dataset
 
