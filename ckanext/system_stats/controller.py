@@ -168,7 +168,7 @@ class BaseController():
         all_groups = Group.all()
         for g in all_groups:
             if g.state == 'active' and not g.is_organization:
-                datasets = g.packages()
+                datasets = g.packages(with_private=True)
                 group_dataset[g.name] = len(datasets)
 
         return group_dataset
