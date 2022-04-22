@@ -12,6 +12,8 @@ from flask import render_template
 import ckan.plugins.toolkit as toolkit
 from sqlalchemy.sql.expression import false
 import ckan.lib.helpers as h
+import ckan.model as model
+import ckan.logic as logic
 from ckan.model import Package, Group, User, Member
 if check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
@@ -27,6 +29,13 @@ if check_plugin_enabled("dataset_reference"):
 class BaseController():
 
     def index():
+        context = {'model': model,
+                   'user': toolkit.g.user, 'auth_user_obj': toolkit.g.userobj}
+        try:
+            logic.check_access('sysadmin', context, {})
+        except logic.NotAuthorized:
+            toolkit.abort(403, 'Need to be system administrator to administer')
+
         result = {}
         result['Number of Datasets'] = BaseController.get_dataset_count()
         result['Number of Organizations'], result['Number of Groups'] = BaseController.get_org_group_count()
