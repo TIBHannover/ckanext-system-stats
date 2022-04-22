@@ -8,15 +8,20 @@ def check_plugin_enabled(plugin_name):
 
 
 
-from math import fabs
 from flask import render_template
 import ckan.plugins.toolkit as toolkit
+from sqlalchemy.sql.expression import false, null
+import ckan.lib.helpers as h
+import requests
 from ckan.model import Package, Group, User
 if check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
 if check_plugin_enabled("sample_link"):
     from ckanext.semantic_media_wiki.libs.sample_link import SampleLinkHelper
+
+if check_plugin_enabled("dataset_reference"):
+    from ckanext.dataset_reference.models.package_reference_link import PackageReferenceLink
  
 
 
@@ -29,7 +34,7 @@ class BaseController():
         result['Number of Users'] = BaseController.get_user_count()
         result['Number of machines resource'], result['Number of machines dataset'] = BaseController.get_linked_machines_count()
         result['Number of samples resource'], result['Number of samples dataset'] = BaseController.get_linked_samples_count()
-               
+        result['Number of datasets linked to publication']  = BaseController.get_linked_publications_count()
 
 
         return render_template('stats_page.html', result=result)
@@ -114,4 +119,18 @@ class BaseController():
                                 dataset_count += 1
                                 dataset_found = True
         return [count, dataset_count]
+    
+
+    @staticmethod
+    def get_linked_publications_count():
+        count = 0
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                res_object = PackageReferenceLink({})
+                result = res_object.get_by_package(name=dataset.name)
+                if result != false and len(result) != 0:
+                    count += 1
+        
+        return count
 
