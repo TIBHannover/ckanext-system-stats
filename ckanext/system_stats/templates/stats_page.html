@@ -2,5 +2,15 @@
 
 
 {% block primary_content_inner %}
-    
+    <h4>{{_('Overall stats')}}</h4>
+    <ul>
+        <li>{{'Number of Datasets:  ' ~  result['Number of Datasets']}}</li>
+        <li>{{'Number of Organizations:  ' ~  result['Number of Organizations']}}</li>
+        <li>{{'Number of Groups:  ' ~  result['Number of Groups']}}</li>
+        <li>{{'Number of Users (system admins excluded):  ' ~  result['Number of Users']}}</li>
+    </ul>
+
+
+
+
 {% endblock %}
