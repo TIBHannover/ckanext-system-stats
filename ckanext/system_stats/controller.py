@@ -153,10 +153,10 @@ class BaseController():
         for dataset in all_datasets:
             if dataset.state == 'active':
                 org = Group.get(dataset.owner_org)
-                if org.name in org_dataset.keys():
-                    org_dataset[org.name] += 1
+                if org.title in org_dataset.keys():
+                    org_dataset[org.title] += 1
                 else:
-                    org_dataset[org.name] = 1
+                    org_dataset[org.title] = 1
 
         return org_dataset
     
@@ -165,11 +165,17 @@ class BaseController():
     @staticmethod
     def get_dataset_per_group():
         group_dataset = {}
-        all_groups = Group.all()
-        for g in all_groups:
-            if g.state == 'active' and not g.is_organization:
-                datasets = g.packages(with_private=True)
-                group_dataset[g.name] = len(datasets)
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                groups = dataset.get_groups()
+                for g in groups:
+                    if g.state == 'active' and not g.is_organization:
+                        if g.title in group_dataset.keys():
+                            group_dataset[g.title] += 1
+                        else:
+                            group_dataset[g.title] = 1
+
 
         return group_dataset
     
