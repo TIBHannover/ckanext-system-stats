@@ -49,6 +49,22 @@
             <li>{{title}}</li>
         {% endfor %}
     </ul>
+
+    <br>
+    <h5>{{_('Datasets with data resources linked to machine(s):')}}</h5>
+    <ul>
+        {% for title in result['datasets_with_machines'] %}
+            <li>{{title}}</li>
+        {% endfor %}
+    </ul>
+
+     <br>
+    <h5>{{_('Datasets with data resources linked to sample(s):')}}</h5>
+    <ul>
+        {% for title in result['datasets_with_samples'] %}
+            <li>{{title}}</li>
+        {% endfor %}
+    </ul>
     
 
 

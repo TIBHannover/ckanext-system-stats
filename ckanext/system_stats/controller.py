@@ -47,6 +47,8 @@ class BaseController():
         result['dataset_per_group'] = BaseController.get_dataset_per_group()
         result['resource_per_type'] = BaseController.get_resources_by_type()
         result['datasets_with_publication'] = BaseController.get_dataset_with_publication()
+        result['datasets_with_machines'] = BaseController.get_dataset_with_machines()
+        result['datasets_with_samples'] = BaseController.get_dataset_with_samples()
 
         return render_template('stats_page.html', result=result)
     
@@ -221,3 +223,45 @@ class BaseController():
         
         return result_datasets
 
+
+    @staticmethod
+    def get_dataset_with_machines():
+        if not check_plugin_enabled("semantic_media_wiki"):
+            return []
+        result_datasets = []
+        dataset_found = False
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            dataset_found = False
+            if dataset.state == 'active':
+                for res in dataset.resources:
+                    if res.state == 'active':
+                        links = machineHelper.get_machine_link(res.id)
+                        if len(links.keys()) != 0:                            
+                            if not dataset_found:
+                                result_datasets.append(dataset.title)
+                                dataset_found = True
+                                break
+        return result_datasets
+    
+
+
+    @staticmethod
+    def get_dataset_with_samples():
+        if not check_plugin_enabled("sample_link"):
+            return []
+        result_datasets = []
+        dataset_found = False
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            dataset_found = False
+            if dataset.state == 'active':
+                for res in dataset.resources:
+                    if res.state == 'active':
+                        links = SampleLinkHelper.get_sample_link(res.id)
+                        if len(links.keys()) != 0:
+                            if not dataset_found:
+                                result_datasets.append(dataset.title)
+                                dataset_found = True
+                                break
+        return result_datasets
