@@ -46,6 +46,7 @@ class BaseController():
         result['dataset_per_org'] = BaseController.get_dataset_per_org()
         result['dataset_per_group'] = BaseController.get_dataset_per_group()
         result['resource_per_type'] = BaseController.get_resources_by_type()
+        result['datasets_with_publication'] = BaseController.get_dataset_with_publication()
 
         return render_template('stats_page.html', result=result)
     
@@ -92,6 +93,8 @@ class BaseController():
 
     @staticmethod
     def get_linked_machines_count():
+        if not check_plugin_enabled("semantic_media_wiki"):
+            return [0, 0]
         count = 0
         dataset_count = 0
         dataset_found = False
@@ -113,6 +116,8 @@ class BaseController():
 
     @staticmethod
     def get_linked_samples_count():
+        if not check_plugin_enabled("sample_link"):
+            return [0,0]
         count = 0
         dataset_count = 0
         dataset_found = False
@@ -134,6 +139,8 @@ class BaseController():
 
     @staticmethod
     def get_linked_publications_count():
+        if not check_plugin_enabled("dataset_reference"):
+            return 0
         count = 0
         all_datasets = Package.search_by_name('')
         for dataset in all_datasets:
@@ -196,4 +203,21 @@ class BaseController():
                                 resources[res.format.lower()] = 1
 
         return resources
+    
+
+
+    @staticmethod
+    def get_dataset_with_publication():
+        if not check_plugin_enabled("dataset_reference"):
+            return []
+        result_datasets = []
+        all_datasets = Package.search_by_name('')
+        for dataset in all_datasets:
+            if dataset.state == 'active':
+                res_object = PackageReferenceLink({})
+                result = res_object.get_by_package(name=dataset.name)
+                if result != false and len(result) != 0:
+                    result_datasets.append(dataset.title)
+        
+        return result_datasets
 

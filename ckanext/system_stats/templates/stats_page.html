@@ -41,6 +41,14 @@
             <li>{{type ~ ":  " ~ count}}</li>
         {% endfor %}
     </ul>
+
+    <br>
+    <h5>{{_('Datasets linked to publication(s):')}}</h5>
+    <ul>
+        {% for title in result['datasets_with_publication'] %}
+            <li>{{title}}</li>
+        {% endfor %}
+    </ul>
     
 
 
