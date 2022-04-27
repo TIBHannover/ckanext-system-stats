@@ -14,10 +14,10 @@
         <li>{{'Number of datasets that their data resources are linked to a sample:  ' ~  result['Number of samples dataset']}}</li>
         <li>{{'Number of datasets linked to publication(s):  ' ~  result['Number of datasets linked to publication']}}</li>
     </ul>
-    <br>
+    <hr>
 
     <h3>{{_('Detailed stats')}}</h3>
-    <br>
+    <hr>
     
     <h5>{{_('Dataset count per organization:')}}</h5>
     <ul>
@@ -26,7 +26,7 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Dataset count per group:')}}</h5>
     <ul>
         {% for group, count in result['dataset_per_group'].items() %}
@@ -34,7 +34,7 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Data resources per type:')}}</h5>
     <ul>
         {% for type, count in result['resource_per_type'].items() %}
@@ -42,7 +42,7 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Datasets linked to publication(s):') ~ ' (' ~  result['datasets_with_publication']|length ~ ')' }}</h5>
     <ul>
         {% for title in result['datasets_with_publication'] %}
@@ -50,7 +50,7 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Datasets with data resources linked to machine(s):') ~ ' (' ~  result['datasets_with_machines']|length ~ ')' }}</h5>
     <ul>
         {% for title in result['datasets_with_machines'] %}
@@ -58,7 +58,7 @@
         {% endfor %}
     </ul>
 
-     <br>
+     <hr>
     <h5>{{_('Datasets with data resources linked to sample(s):') ~ ' (' ~  result['datasets_with_samples']|length ~ ')'}}</h5>
     <ul>
         {% for title in result['datasets_with_samples'] %}
@@ -66,7 +66,7 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Datasets with customer annotation fields:') ~ ' (' ~  result['datasets_with_annotaion']|length ~ ')'}}</h5>
     <ul>
         {% for title in result['datasets_with_annotaion'] %}
@@ -74,11 +74,11 @@
         {% endfor %}
     </ul>
 
-    <br>
+    <hr>
     <h5>{{_('Groups have linked their datasets with publications:')}}</h5>
     <ul>
         {% for group, datasets in result['group_with_datasets_with_publication'].items() %}
-            <li>{{group ~ '  (' ~  datasets|length ~ ')'}}
+            <li><strong>{{group ~ '  (' ~  datasets|length ~ ')'}}</strong> 
                 <ul>
                     {% for title in datasets %}
                         <li>{{title}}</li>
