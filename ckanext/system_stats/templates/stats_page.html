@@ -43,7 +43,7 @@
     </ul>
 
     <br>
-    <h5>{{_('Datasets linked to publication(s):')}}</h5>
+    <h5>{{_('Datasets linked to publication(s):') ~ ' (' ~  result['datasets_with_publication']|length ~ ')' }}</h5>
     <ul>
         {% for title in result['datasets_with_publication'] %}
             <li>{{title}}</li>
@@ -51,7 +51,7 @@
     </ul>
 
     <br>
-    <h5>{{_('Datasets with data resources linked to machine(s):')}}</h5>
+    <h5>{{_('Datasets with data resources linked to machine(s):') ~ ' (' ~  result['datasets_with_machines']|length ~ ')' }}</h5>
     <ul>
         {% for title in result['datasets_with_machines'] %}
             <li>{{title}}</li>
@@ -59,9 +59,17 @@
     </ul>
 
      <br>
-    <h5>{{_('Datasets with data resources linked to sample(s):')}}</h5>
+    <h5>{{_('Datasets with data resources linked to sample(s):') ~ ' (' ~  result['datasets_with_samples']|length ~ ')'}}</h5>
     <ul>
         {% for title in result['datasets_with_samples'] %}
+            <li>{{title}}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <h5>{{_('Datasets with customer annotation fields:') ~ ' (' ~  result['datasets_with_annotaion']|length ~ ')'}}</h5>
+    <ul>
+        {% for title in result['datasets_with_annotaion'] %}
             <li>{{title}}</li>
         {% endfor %}
     </ul>

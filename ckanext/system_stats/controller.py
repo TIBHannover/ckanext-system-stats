@@ -14,7 +14,7 @@ from sqlalchemy.sql.expression import false
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.logic as logic
-from ckan.model import Package, Group, User, Member
+from ckan.model import Package, Group, User
 if check_plugin_enabled("semantic_media_wiki"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
@@ -49,6 +49,7 @@ class BaseController():
         result['datasets_with_publication'] = BaseController.get_dataset_with_publication()
         result['datasets_with_machines'] = BaseController.get_dataset_with_machines()
         result['datasets_with_samples'] = BaseController.get_dataset_with_samples()
+        result['datasets_with_annotaion'] = BaseController.get_datasets_with_extra_annotaion()
 
         return render_template('stats_page.html', result=result)
     
@@ -264,4 +265,22 @@ class BaseController():
                                 result_datasets.append(dataset.title)
                                 dataset_found = True
                                 break
+        return result_datasets
+    
+
+
+    @staticmethod
+    def get_datasets_with_extra_annotaion():
+        result_datasets = []
+        packages = Package.search_by_name('')
+        for dataset in packages:
+            if dataset.state == 'active':
+                dataset_extras = dataset.as_dict()['extras']
+                if len(dataset_extras.keys()) == 0:
+                    continue
+                elif len(dataset_extras.keys()) == 1 and list(dataset_extras.keys())[0] == 'sfb_dataset_type':
+                    continue
+                else:
+                    result_datasets.append(dataset.title)
+                                
         return result_datasets
