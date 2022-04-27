@@ -50,6 +50,7 @@ class BaseController():
         result['datasets_with_machines'] = BaseController.get_dataset_with_machines()
         result['datasets_with_samples'] = BaseController.get_dataset_with_samples()
         result['datasets_with_annotaion'] = BaseController.get_datasets_with_extra_annotaion()
+        result['group_with_datasets_with_publication'] = BaseController.get_dataset_with_publication_per_group()
 
         return render_template('stats_page.html', result=result)
     
@@ -284,3 +285,24 @@ class BaseController():
                     result_datasets.append(dataset.title)
                                 
         return result_datasets
+
+
+
+    @staticmethod
+    def get_dataset_with_publication_per_group():
+        result_groups = {}
+        packages = Package.search_by_name('')
+        for dataset in packages:
+            if dataset.state == 'active':
+                res_object = PackageReferenceLink({})
+                result = res_object.get_by_package(name=dataset.name)
+                if result != false and len(result) != 0:
+                    groups = dataset.get_groups()
+                    for g in groups:
+                        if g.state == 'active' and not g.is_organization:
+                            if g.title in result_groups.keys():
+                                result_groups[g.title].append(dataset.title)
+                            else:
+                                result_groups[g.title] = [dataset.title]
+
+        return result_groups

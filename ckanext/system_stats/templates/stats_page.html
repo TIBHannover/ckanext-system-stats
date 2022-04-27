@@ -73,6 +73,20 @@
             <li>{{title}}</li>
         {% endfor %}
     </ul>
+
+    <br>
+    <h5>{{_('Groups have linked their datasets with publications:')}}</h5>
+    <ul>
+        {% for group, datasets in result['group_with_datasets_with_publication'].items() %}
+            <li>{{group ~ '  (' ~  datasets|length ~ ')'}}
+                <ul>
+                    {% for title in datasets %}
+                        <li>{{title}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
     
 
 
