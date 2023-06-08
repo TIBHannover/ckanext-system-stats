@@ -15,7 +15,7 @@ import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.logic as logic
 from ckan.model import Package, Group, User
-if check_plugin_enabled("semantic_media_wiki"):
+if check_plugin_enabled("machine_link"):
     from ckanext.semantic_media_wiki.libs.media_wiki import Helper as machineHelper
 
 if check_plugin_enabled("sample_link"):
@@ -97,7 +97,7 @@ class BaseController():
 
     @staticmethod
     def get_linked_machines_count():
-        if not check_plugin_enabled("semantic_media_wiki"):
+        if not check_plugin_enabled("machine_link"):
             return [0, 0]
         count = 0
         dataset_count = 0
@@ -228,7 +228,7 @@ class BaseController():
 
     @staticmethod
     def get_dataset_with_machines():
-        if not check_plugin_enabled("semantic_media_wiki"):
+        if not check_plugin_enabled("machine_link"):
             return []
         result_datasets = []
         dataset_found = False
