@@ -1,4 +1,4 @@
-[![Tests](https://github.com//ckanext-system-stats/workflows/Tests/badge.svg?branch=main)](https://github.com//ckanext-system-stats/actions)
+[![CI](https://github.com/TIBHannover/ckanext-system-stats/actions/workflows/test.yml/badge.svg)](https://github.com/TIBHannover/ckanext-system-stats/actions/workflows/test.yml)
 
 # ckanext-system-stats
 
